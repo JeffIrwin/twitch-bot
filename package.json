@@ -1,0 +1,26 @@
+{
+  "name": "twitch-bot",
+  "version": "1.0.0",
+  "description": "Jeff's twitch bot",
+  "main": "bot.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeffIrwin/twitch-bot.git"
+  },
+  "keywords": [
+    "twitch"
+  ],
+  "author": "Jeff Irwin",
+  "license": "BSD-3",
+  "bugs": {
+    "url": "https://github.com/JeffIrwin/twitch-bot/issues"
+  },
+  "homepage": "https://github.com/JeffIrwin/twitch-bot#readme",
+  "dependencies": {
+    "tmi.js": "^1.8.5"
+  }
+}
