@@ -54,45 +54,45 @@ function onMessageHandler (target, context, msg, self)
 	const commandName = msg.trim();
 
 	// If the command is known, let's execute it
-	if (commandName === '!dice')
-	{
-
-		const num = rollDice();
-
-		client.say(target, `You rolled a ${num}`);
-
-		console.log(`* Executed ${commandName} command`);
-		//console.log(`num = ${num}`);
-		//console.log(`target = ${target}`);
-
-	}
-	else if (commandName === "!help")
+	switch (commandName) {
+	case "!help":
 	{
 		let help =
 			"Commands:\n" +
 			"\t!help    -- Show this screen.\n" +
+			"\t!links   -- Show Jeff's links.\n" +
 			"\t!version -- Show " + me + " version.\n" +
 			"\t!dice    -- Roll dice.\n";
-		//client.say(target, help); // no newlines :(
 
-		//let help_lines = help.match(/\n/g);
 		const help_lines = help.split("\n");
-		//console.log("help_lines = ", help_lines);
-
-		//for (help_line in help_lines)
 		for (var i = 0; i < help_lines.length; i++)
 		{
 			client.say(target, help_lines[i]);
 		}
+		break;
 	}
-	else if (commandName === "!version")
+	case "!dice":
+	{
+		const num = rollDice();
+		client.say(target, `You rolled a ${num}`);
+		console.log(`* Executed ${commandName} command`);
+		break;
+	}
+	case "!links":
+	{
+		client.say(target, "https://www.jeffirwin.xyz/about");
+		break;
+	}
+	case "!version":
 	{
 		client.say(target, me + " " + vers);
+		break;
 	}
-	else
+	default:
 	{
 		console.log(`* Unknown command ${commandName}`);
-	}
+		break;
+	}}
 }
 
 // Function called when the "dice" command is issued
