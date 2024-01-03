@@ -51,16 +51,27 @@ function onMessageHandler (target, context, msg, self)
 	if (self) { return; } // Ignore messages from the bot
 
 	// Remove whitespace from chat message
-	const commandName = msg.trim();
+	const cmd_line = msg.trim();
+	const cmd_words = cmd_line.match(/(?:[^\s"]+|"[^"]*")+/g);
+	const cmd  = cmd_words[0];
+	const args = cmd_words.slice(1);
+
+	//console.log("cmd  = " + cmd);
+	//console.log("args = " + args);
 
 	// If the command is known, let's execute it
-	switch (commandName) {
+	switch (cmd) {
 	case "!help":
+	case "!h":
+	case "!commands":
+	case "!command":
 	{
 		let help =
 			"Commands:\n" +
 			"\t!help    -- Show this screen.\n" +
 			"\t!links   -- Show Jeff's links.\n" +
+			//"\t!echo    -- Print string arguments.\n" + // TODO: is this safe
+			//"\t!eval    -- Execute arbitrary javascript.\n" +
 			"\t!version -- Show " + me + " version.\n" +
 			"\t!dice    -- Roll dice.\n";
 
@@ -74,8 +85,8 @@ function onMessageHandler (target, context, msg, self)
 	case "!dice":
 	{
 		const num = rollDice();
-		client.say(target, `You rolled a ${num}`);
-		console.log(`* Executed ${commandName} command`);
+		client.say(target, "You rolled a " + num);
+		//console.log("* Executed `" + cmd + "` command");
 		break;
 	}
 	case "!links":
@@ -88,9 +99,33 @@ function onMessageHandler (target, context, msg, self)
 		client.say(target, me + " " + vers);
 		break;
 	}
+	case "!echo":
+	{
+		client.say(target, args.join(" "));
+		break;
+	}
+	//case "!eval":
+	//{
+	//	// Usage: !eval 1 + 2
+	//	const arg = args.join(" ");
+
+	//	//// Usage: !eval "1 + 2"
+	//	//const arg = args[0].replace(/['"]+/g, ''); // strip quotes
+
+	//	console.log("arg = " + arg);
+	//	client.say(target, "" + eval(arg));
+	//	break;
+	//}
 	default:
 	{
-		console.log(`* Unknown command ${commandName}`);
+		let char_ = cmd.substring(0, 1);
+		if (char_ == "!")
+		{
+			// Don't bother logging non-commands
+
+			client.say(target, "Unknown command `" + cmd + "`.  Use `!help` to show commands.");
+			//console.log("* Unknown command `" + cmd + "`");
+		}
 		break;
 	}}
 }
@@ -105,6 +140,6 @@ function rollDice ()
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler (addr, port)
 {
-	console.log(`* Connected to ${addr}:${port}`);
+	console.log("* Connected to " + addr + ":" + port);
 }
 
