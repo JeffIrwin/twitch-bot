@@ -15,6 +15,9 @@ import tmi from "tmi.js";
 //
 import secrets from "./scratch/secrets.js";
 
+import { spawn } from 'child_process';
+//import 'child_process';
+
 const me = "geoff_erwin";
 const vers = "0.0.1";
 
@@ -102,6 +105,60 @@ function onMessageHandler (target, context, msg, self)
 	case "!echo":
 	{
 		client.say(target, args.join(" "));
+		break;
+	}
+	case "!syntran":
+	case "!sy":
+	{
+		// Usage: !syntran 1 + 2;
+		const arg = args.join(" ");
+
+		if (arg.includes("open"))
+		{
+			// This will block anything that even contains an "open" substring
+			client.say(target, "You are not in the sudoers file. This incident will be reported");
+		}
+		else
+		{
+			//client.say(target, "ok");
+
+			//var ls  = spawn('ls', ['-l']);
+			//ls.stdout.on('data', function (data) {
+			//   console.log(`stdout: ${data}`);
+			//});
+
+			//var cmd = spawn('syntran', ['-c "' + arg + '"']);
+			//var sy_cmd = spawn('syntran', ['-c', arg]);
+
+			console.log("cwd = ", process.cwd());
+
+			//var sy_cmd = spawn('/home/jeff/bin/syntran', ['-c', arg]);
+			//var sy_cmd = spawn('/home/jeff/bin/syntran', ['--version']);
+
+			// Prerequisite: build syntran.exe natively in Windows (*not* in
+			// WSL) and copy into this repository's folder
+			//var sy_cmd = spawn('.\\syntran.exe', ['--version']);
+			//var sy_cmd = spawn('.\\syntran.exe', ['-c "' + arg + '"']);
+			var sy_cmd = spawn('.\\syntran.exe', ['-c', arg]);
+
+			let answer = "";
+			sy_cmd.stdout.on('data', function (data) {
+				console.log(`stdout: ${data}`);
+				answer = data;
+				client.say(target, "" + data);
+			});
+
+			sy_cmd.stderr.on('data', (data) => {
+			  console.error(`stderr: ${data}`);
+			});
+
+			sy_cmd.on('close', (code) => {
+			  console.log(`child process exited with code ${code}`);
+			});
+
+			//client.say(target, "" + answer);
+
+		}
 		break;
 	}
 	//case "!eval":
