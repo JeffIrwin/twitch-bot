@@ -9,7 +9,8 @@ import tmi from "tmi.js";
 // To get a token, first create a bot account and register the bot app according
 // to these instructions:  https://dev.twitch.tv/docs/irc/get-started/
 //
-// Then, use the twitch cli to generate a token:
+// Then, just run `run.sh`.  Or manually, use the twitch cli to generate a
+// token:
 //
 //     /mnt/c/Program\ Files/twitch/twitch-cli_1.1.22_Windows_x86_64/twitch.exe token -u -s "chat:read chat:edit"
 //
@@ -19,7 +20,7 @@ import { spawn } from 'child_process';
 //import 'child_process';
 
 const me = "geoff_erwin";
-const vers = "0.0.1";
+const vers = "0.0.2";
 
 //==============================================================================
 
@@ -73,6 +74,7 @@ function onMessageHandler (target, context, msg, self)
 			"Commands:\n" +
 			"\t!help    -- Show this screen.\n" +
 			"\t!links   -- Show Jeff's links.\n" +
+			"\t!syntran 1+2;  -- Run syntran code.\n" +
 			//"\t!echo    -- Print string arguments.\n" + // TODO: is this safe
 			//"\t!eval    -- Execute arbitrary javascript.\n" +
 			"\t!version -- Show " + me + " version.\n" +
@@ -113,38 +115,23 @@ function onMessageHandler (target, context, msg, self)
 		// Usage: !syntran 1 + 2;
 		const arg = args.join(" ");
 
-		if (arg.includes("open"))
+		if (arg.includes("open") || arg.includes("include"))
 		{
 			// This will block anything that even contains an "open" substring
 			client.say(target, "You are not in the sudoers file. This incident will be reported");
 		}
 		else
 		{
-			//client.say(target, "ok");
-
-			//var ls  = spawn('ls', ['-l']);
-			//ls.stdout.on('data', function (data) {
-			//   console.log(`stdout: ${data}`);
-			//});
-
-			//var cmd = spawn('syntran', ['-c "' + arg + '"']);
-			//var sy_cmd = spawn('syntran', ['-c', arg]);
-
-			console.log("cwd = ", process.cwd());
-
-			//var sy_cmd = spawn('/home/jeff/bin/syntran', ['-c', arg]);
-			//var sy_cmd = spawn('/home/jeff/bin/syntran', ['--version']);
+			//console.log("cwd = ", process.cwd());
 
 			// Prerequisite: build syntran.exe natively in Windows (*not* in
 			// WSL) and copy into this repository's folder
-			//var sy_cmd = spawn('.\\syntran.exe', ['--version']);
-			//var sy_cmd = spawn('.\\syntran.exe', ['-c "' + arg + '"']);
 			var sy_cmd = spawn('.\\syntran.exe', ['-c', arg]);
 
-			let answer = "";
 			sy_cmd.stdout.on('data', function (data) {
 				console.log(`stdout: ${data}`);
-				answer = data;
+
+				// TODO: maybe only send last line of data to chat?
 				client.say(target, "" + data);
 			});
 
@@ -155,8 +142,6 @@ function onMessageHandler (target, context, msg, self)
 			sy_cmd.on('close', (code) => {
 			  console.log(`child process exited with code ${code}`);
 			});
-
-			//client.say(target, "" + answer);
 
 		}
 		break;
