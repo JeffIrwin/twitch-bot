@@ -49,10 +49,58 @@ client.on('connected', onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
+//periodicMessages();
+
+//function periodicMessage(target) {
+//  return new Promise((resolve) => {
+//    setInterval(() => {
+//      client.say(target, "periodic message");
+//      resolve('resolved');
+//    }, 5000);
+//  });
+//}
+
+async function periodicMessages(target)
+{
+	while (true)
+	{
+		client.say(target, "periodic message");
+		//await new Promise(r => setTimeout(() => r(), 5000));
+		await sleep(5000);
+	}
+
+//let intervalId = null;
+//	function toggleThisCrap(targetOrWhateverYouWantHere)
+//	{ 
+//		if (intervalId)
+//		{
+//			clearInterval(intervalId);
+//			intervalId = null;
+//			console.log('Logging stopped');
+//			return;
+//		}
+//		intervalId = setInterval(() => { console.log('Logging every 10 seconds');	}, 10000);
+//		console.log('Logging started');
+//	}
+//
+//  //console.log(result);
+//  // Expected output: "resolved"
+//}
+}
+
 // Called every time a message comes in
+let first = false;
 function onMessageHandler (target, context, msg, self)
 {
 	if (self) { return; } // Ignore messages from the bot
+
+	if (!first)
+	{
+		first = true;
+
+		//// TODO: set the periodic message string and uncomment
+		//periodicMessages(target);
+	}
 
 	// Remove whitespace from chat message
 	const cmd_line = msg.trim();
@@ -183,5 +231,10 @@ function rollDice ()
 function onConnectedHandler (addr, port)
 {
 	console.log("* Connected to " + addr + ":" + port);
+}
+
+function sleep(ms)
+{
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 

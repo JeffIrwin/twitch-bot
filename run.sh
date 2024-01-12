@@ -30,9 +30,11 @@ run_twitch_bot()
 	cmd.exe /c "node bot.js"
 }
 
+# TODO: update ./syntran.exe from installation?
+
 # Try to just start the bot first.  If it fails (probably due to login issue),
 # get a new token and try again
-run_twitch_bot || \
+run_twitch_bot #|| \
 	get_twitch_token && \
 	run_twitch_bot
 
