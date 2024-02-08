@@ -111,6 +111,9 @@ function onMessageHandler (target, context, msg, self)
 	//console.log("cmd  = " + cmd);
 	//console.log("args = " + args);
 
+	// TODO:
+	// - add !jeff command
+
 	// If the command is known, let's execute it
 	switch (cmd) {
 	case "!help":
@@ -140,6 +143,11 @@ function onMessageHandler (target, context, msg, self)
 		const num = rollDice();
 		client.say(target, "You rolled a " + num);
 		//console.log("* Executed `" + cmd + "` command");
+		break;
+	}
+	case "!lurk":
+	{
+		// do nothing
 		break;
 	}
 	case "!links":
