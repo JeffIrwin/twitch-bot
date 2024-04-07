@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #============================================================
 
 # One-time setup:
 #
 #     npm install
-#     brew install twitch
-#     # (check brew website for instructions on installing brew)
+#     brew install twitchdev/twitch/twitch-cli
+#     # (check brew website for instructions on installing brew on linux)
 
 #============================================================
 
@@ -20,17 +20,25 @@ get_twitch_token()
 	#mv scratch/secrets.js scratch/secrets-old.js
 
 	# TODO: cmd flag to enable/disable token refresh
-	twitch="/mnt/c/Program Files/twitch/twitch-cli_1.1.22_Windows_x86_64/twitch.exe"
+
+	#twitch="/mnt/c/Program Files/twitch/twitch-cli_1.1.22_Windows_x86_64/twitch.exe"
+	twitch="twitch"
+
 	echo "const oauth_token = \"$("${twitch}" token -u -s "chat:read chat:edit" |& grep -oP "User Access Token: \K.*")\"; export default { oauth_token };" > scratch/secrets.js
 
 }
 
 run_twitch_bot()
 {
-	cmd.exe /c "node bot.js"
+	#cmd.exe /c "node bot.js"  # windows
+	node bot.js  # linux
 }
 
 # TODO: update ./syntran.exe from installation?
+
+if [[ ! -e scratch/secrets.js ]]; then
+	get_twitch_token
+fi
 
 # Try to just start the bot first.  If it fails (probably due to login issue),
 # get a new token and try again
