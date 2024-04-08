@@ -101,30 +101,19 @@ function on_msg_handler(target, context, msg, self)
 	//console.log("cmd  = " + cmd);
 	//console.log("args = " + args);
 
+	const HELP =
+		"commands:\n" +
+		"\t!help    -- show this screen.\n" +
+		"\t!links   -- show jeff's links.\n" +
+		"\t!syntran 1+2;  -- run syntran code.\n" +
+		//"\t!echo    -- print string arguments.\n" +
+		//"\t!eval    -- execute arbitrary javascript.\n" +
+		"\t!version -- show " + ME + " version.\n" +
+		"\t!dice    -- roll dice.\n";
+	const HELP_LINES = HELP.split("\n");
+
 	// If the command is known, let's execute it
 	switch (cmd) {
-	case "!help":
-	case "!h":
-	case "!commands":
-	case "!command":
-	{
-		let help =
-			"commands:\n" +
-			"\t!help    -- show this screen.\n" +
-			"\t!links   -- show jeff's links.\n" +
-			"\t!syntran 1+2;  -- run syntran code.\n" +
-			//"\t!echo    -- print string arguments.\n" +
-			//"\t!eval    -- execute arbitrary javascript.\n" +
-			"\t!version -- show " + ME + " version.\n" +
-			"\t!dice    -- roll dice.\n";
-
-		const help_lines = help.split("\n");
-		for (let i = 0; i < help_lines.length; i++)
-		{
-			client.say(target, help_lines[i]);
-		}
-		break;
-	}
 	case "!dice":
 	{
 		const num = roll_dice();
@@ -137,14 +126,36 @@ function on_msg_handler(target, context, msg, self)
 		client.say(target, "i don't have a discord, but you can use !links to see my social links");
 		break;
 	}
+	case "!echo":
+	{
+		client.say(target, args.join(" "));
+		break;
+	}
+	//case "!eval":
+	//{
+	//	// Usage: !eval 1 + 2
+	//	const arg = args.join(" ");
+	//	//// Usage: !eval "1 + 2"
+	//	//const arg = args[0].replace(/[""]+/g, ""); // strip quotes
+	//	console.log("arg = " + arg);
+	//	client.say(target, "" + eval(arg));
+	//	break;
+	//}
+	case "!help":
+	case "!h":
+	case "!commands":
+	case "!command":
+	{
+
+		for (let i = 0; i < HELP_LINES.length; i++)
+		{
+			client.say(target, HELP_LINES[i]);
+		}
+		break;
+	}
 	case "!jeff":
 	{
 		client.say(target, "my name is jeff");
-		break;
-	}
-	case "!lurk":
-	{
-		// do nothing
 		break;
 	}
 	case "!links":
@@ -152,14 +163,9 @@ function on_msg_handler(target, context, msg, self)
 		client.say(target, "https://www.jeffirwin.xyz/about");
 		break;
 	}
-	case "!version":
+	case "!lurk":
 	{
-		client.say(target, ME + " " + VERS);
-		break;
-	}
-	case "!echo":
-	{
-		client.say(target, args.join(" "));
+		// do nothing
 		break;
 	}
 	case "!syntran":
@@ -202,18 +208,11 @@ function on_msg_handler(target, context, msg, self)
 		}
 		break;
 	}
-	//case "!eval":
-	//{
-	//	// Usage: !eval 1 + 2
-	//	const arg = args.join(" ");
-
-	//	//// Usage: !eval "1 + 2"
-	//	//const arg = args[0].replace(/[""]+/g, ""); // strip quotes
-
-	//	console.log("arg = " + arg);
-	//	client.say(target, "" + eval(arg));
-	//	break;
-	//}
+	case "!version":
+	{
+		client.say(target, ME + " " + VERS);
+		break;
+	}
 	default:
 	{
 		let char_ = cmd.substring(0, 1);
