@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/JeffIrwin/twitch-bot#readme",
   "dependencies": {
-    "tmi.js": "^1.8.5"
+    "tmi.js": "^1.8.5",
+    "strip-ansi": "^7.1.0"
   }
 }

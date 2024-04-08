@@ -1,5 +1,12 @@
 
-import tmi from "tmi.js";
+// standard imports
+import { spawnSync } from "child_process";
+
+// 3p imports
+import tmi from "tmi.js";            // twitch
+import stripAnsi from 'strip-ansi';  // remove ANSI esc sequences from strings
+
+// my imports
 
 // Example secrets file:
 //
@@ -25,8 +32,7 @@ import tmi from "tmi.js";
 
 import secrets from "./scratch/secrets.js";
 
-import { spawn } from "child_process";
-//import "child_process";
+//==============================================================================
 
 const ME = "geoff_erwin";
 const VERS = "0.0.3";
@@ -113,7 +119,7 @@ function on_msg_handler(target, context, msg, self)
 			"\t!dice    -- roll dice.\n";
 
 		const help_lines = help.split("\n");
-		for (var i = 0; i < help_lines.length; i++)
+		for (let i = 0; i < help_lines.length; i++)
 		{
 			client.say(target, help_lines[i]);
 		}
@@ -169,30 +175,29 @@ function on_msg_handler(target, context, msg, self)
 		}
 		else
 		{
+			// TODO: wrap this whole case in an async fn in case somebody
+			// drops a math bomb
+
 			//console.log("cwd = ", process.cwd());
 
 			// Prerequisite: build syntran.exe natively in Windows (*not* in
 			// WSL) and copy into this repository's folder
-			//var sy_cmd = spawn(".\\syntran.exe", ["-c", arg]);
+			//let sy_cmd = spawnSync(".\\syntran.exe", ["-c", arg]);
 
 			// Use WSL syntran binary.  This works as long as you also run this
 			// bot in WSL nodejs
-			var sy_cmd = spawn("syntran", ["-c", arg]);
+			let sy_cmd = spawnSync("syntran", ["-c", arg]);
 
-			sy_cmd.stdout.on("data", function (data) {
-				console.log(`stdout: ${data}`);
-
-				// TODO: maybe only send last line of data to chat?
-				client.say(target, "" + data);
-			});
-
-			sy_cmd.stderr.on("data", (data) => {
-			  console.error(`stderr: ${data}`);
-			});
-
-			sy_cmd.on("close", (code) => {
-			  console.log(`child process exited with code ${code}`);
-			});
+			//if (sy_cmd.status == 0)
+			//{
+				// syntran just always returns 0 for "-c".  Need to fix it there
+				// instead of trying to hack return status based on number of
+				// lines
+				//client.say(target, "" + sy_cmd.stdout);
+				let lines = ("" + sy_cmd.stdout).split("\n");
+				//client.say(target, "" + lines[0]);
+				client.say(target, "" + stripAnsi(lines[0]));
+			//}
 
 		}
 		break;
@@ -216,7 +221,7 @@ function on_msg_handler(target, context, msg, self)
 		{
 			// Don't bother logging non-commands
 
-			client.say(target, "unknown command `" + cmd + "`.  use `!help` to show commands.");
+			client.say(target, "unknown command `" + cmd + "`.  use !help to show commands.");
 			//console.log("* unknown command `" + cmd + "`");
 		}
 		break;
