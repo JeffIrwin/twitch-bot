@@ -134,7 +134,7 @@ function on_msg_handler(target, context, msg, self)
 	}
 	case "!discord":
 	{
-		client.say(target, "I don't have a discord, but you can use !links to see my social links");
+		client.say(target, "i don't have a discord, but you can use !links to see my social links");
 		break;
 	}
 	case "!jeff":
