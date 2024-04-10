@@ -25,6 +25,7 @@ import stripAnsi from 'strip-ansi';  // remove ANSI esc sequences from strings
 // CLI to setup the client ID and secret (copied from dev.twitch.tv settings) to
 // get your first token.
 //
+//     https://github.com/twitchdev/twitch-cli/releases/download/v1.1.22/twitch-cli_1.1.22_Windows_x86_64.zip
 //     twitch.exe token -u -s "chat:edit chat:read"
 //
 // On subsequent runs of this script, WSL twitch binary should work
@@ -71,9 +72,13 @@ async function periodic_msgs(target)
 {
 	while (true)
 	{
-		//let msg = "howdy!  welcome to the stream.  try commands like !help or !links";
 		let msg = "don't forget to smash that bell.  try commands like !help or !links";
+		//let msg = "howdy!  welcome to the stream.  try commands like !help or !links";
 		client.say(target, msg);
+
+		// it would be nice to reset the sleep period back up to 15 minutes
+		// every time someone else leaves a comment, but that's a little more
+		// complicated
 		//await sleep_ms(5 * MS_PER_S);
 		await sleep_ms(15 * MS_PER_MIN);
 	}
