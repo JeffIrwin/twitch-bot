@@ -7,10 +7,6 @@
 # This is a standalone script mainly for testing and development, but it could
 # just be a part of run.sh now that it's done
 
-#curl -X POST https://id.twitch.tv/oauth2/token \
-#-H 'Content-Type: application/x-www-form-urlencoded' \
-#-d 'grant_type=refresh_token&refresh_token=gdw3k62zpqi0kw01escg7zgbdhtxi6hm0155tiwcztxczkx17&client_id=<your client id goes here>&client_secret=<your client secret goes here>'
-
 config="${HOME}/.config/twitch-cli/.twitch-cli.env"
 
 # get the shit from the goddamn config
