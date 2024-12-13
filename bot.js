@@ -79,8 +79,10 @@ async function periodic_msgs(target)
 		// it would be nice to reset the sleep period back up to 15 minutes
 		// every time someone else leaves a comment, but that's a little more
 		// complicated
+
 		//await sleep_ms(5 * MS_PER_S);
-		await sleep_ms(15 * MS_PER_MIN);
+		//await sleep_ms(15 * MS_PER_MIN);
+		await sleep_ms(25 * MS_PER_MIN);
 	}
 }
 
